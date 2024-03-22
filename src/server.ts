@@ -5,6 +5,7 @@ import cors from "cors";
 import { weatherRouter } from "./weather.routes";
 
 dotenv.config();
+const PORT = process.env.PORT || 5200;
 
 try {
     const app = express();
@@ -13,8 +14,8 @@ try {
     // Registers the weather routes
     app.use("/weather", weatherRouter);
 
-    app.listen(5200, () => {
-        console.log(`Server running at http://localhost:5200...`);
+    app.listen(PORT, () => {
+        console.log(`Server running at ${PORT}`);
     });
 } catch (error) {
     console.error(error);
