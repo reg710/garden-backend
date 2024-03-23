@@ -1,10 +1,12 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
 import axios from "axios";
-import { HistoricalWeather, IWeatherResponse } from "./domain-objects/historical-weather";
+import { HistoricalWeather } from "./domain-objects/historical-weather";
 
 dotenv.config();
 const { WEATHER_API_KEY } = process.env;
+const { WEATHER_API_URL } = process.env;
+const { WEATHER_API_HOST } = process.env;
 
 export const weatherRouter = express.Router();
 // TODO lookup more info
@@ -17,7 +19,7 @@ weatherRouter.get("/:zip", async (req, res) => {
     }
     const options = {
         method: 'GET',
-        url: 'https://visual-crossing-weather.p.rapidapi.com/history',
+        url: WEATHER_API_URL,
         params: {
             startDateTime: '2022-08-27T00:00:00',
             aggregateHours: '24',
@@ -25,11 +27,11 @@ weatherRouter.get("/:zip", async (req, res) => {
             endDateTime: '2022-08-28T00:00:00',
             unitGroup: 'us',
             contentType: 'json',
-            shortColumnNames: '0'
+            shortColumnNames: '0',
         },
         headers: {
             'X-RapidAPI-Key': WEATHER_API_KEY,
-            'X-RapidAPI-Host': 'visual-crossing-weather.p.rapidapi.com'
+            'X-RapidAPI-Host': WEATHER_API_HOST,
         }
     };
     try {
