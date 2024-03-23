@@ -107,3 +107,13 @@ export interface IWeatherValues {
     "windchill": number | null,
     "info": any
 }
+
+export interface IWeatherParams {
+    startDateTime: string // '2022-08-27T00:00:00'
+    aggregateHours: '1' | '24', // 1 represents hours, 24 represents daily
+    location: string, // Accepts address, partial address, or latitude and longitude. Plan to only to use zip.
+    endDateTime: string, // '2022-08-28T00:00:00'
+    unitGroup: 'us' | 'uk' | 'metric', // only plan to use us
+    contentType: 'json'  | 'csv', // only plan to use json. Optional.
+    shortColumnNames: 'true' // reduces colum information, which is not currently needed
+}

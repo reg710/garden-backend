@@ -1,7 +1,8 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
 import axios from "axios";
-import { HistoricalWeather } from "./domain-objects/historical-weather";
+import { DateTime } from 'luxon';
+import { HistoricalWeather, IWeatherParams } from "./domain-objects/historical-weather";
 
 dotenv.config();
 const { WEATHER_API_KEY } = process.env;
@@ -17,18 +18,12 @@ weatherRouter.get("/:zip", async (req, res) => {
     if (!zip) {
         // TODO handle error
     }
+
+    const params = createWeatherParams(zip);
     const options = {
         method: 'GET',
         url: WEATHER_API_URL,
-        params: {
-            startDateTime: '2022-08-27T00:00:00',
-            aggregateHours: '24',
-            location: zip,
-            endDateTime: '2022-08-28T00:00:00',
-            unitGroup: 'us',
-            contentType: 'json',
-            shortColumnNames: '0',
-        },
+        params,
         headers: {
             'X-RapidAPI-Key': WEATHER_API_KEY,
             'X-RapidAPI-Host': WEATHER_API_HOST,
@@ -36,7 +31,6 @@ weatherRouter.get("/:zip", async (req, res) => {
     };
     try {
         const weatherResponse = await axios.request(options);
-        console.log(weatherResponse.data);
         // TODO how to type axios response data?
         const precipationData = new HistoricalWeather(weatherResponse.data, zip)
         res.status(200).send(precipationData);
@@ -44,3 +38,21 @@ weatherRouter.get("/:zip", async (req, res) => {
         res.status(500).send(error instanceof Error ? error.message : "Unknown error");
     }
 })
+
+// TODO move outside of routes file
+function createWeatherParams(zip: string): IWeatherParams {
+    // Searching from 3 days ago through end of yesterday
+    let now = DateTime.now();
+    let startDateTime = now.minus({ days: 3 }).startOf('day').toISO({ includeOffset: false });
+    let endDateTime = now.minus({ days: 1 }).endOf('day').toISO({ includeOffset: false });
+    let params: IWeatherParams = {
+        startDateTime,
+        location: zip,
+        endDateTime,
+        aggregateHours: '24',
+        unitGroup: 'us',
+        contentType: 'json',
+        shortColumnNames: 'true'
+    }
+    return params;
+}
