@@ -1,5 +1,5 @@
 
-export class HistoricalWeather {
+export class WeatherReport {
     locationName: string;
     data: IWeatherData[];
 
@@ -113,7 +113,7 @@ export interface IWeatherParams {
     aggregateHours: '1' | '24', // 1 represents hours, 24 represents daily
     location: string, // Accepts address, partial address, or latitude and longitude. Plan to only to use zip.
     endDateTime: string, // '2022-08-28T00:00:00'
-    unitGroup: 'us' | 'uk' | 'metric', // only plan to use us
+    unitGroup: 'us' | 'uk' | 'metric', // only plan to use us. This means precipitation value is in inches.
     contentType: 'json'  | 'csv', // only plan to use json. Optional.
-    shortColumnNames: 'true' // reduces colum information, which is not currently needed
+    shortColumnNames: 'true' // reduces column information, which is not currently needed
 }
