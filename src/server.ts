@@ -2,7 +2,8 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { connectToDatabase } from "./database";
-import { weatherRouter } from "./weather.routes";
+import { weatherRouter } from "./routes/weather.routes";
+import { plantRouter } from "./routes/plant.routes";
 
 dotenv.config();
 const PORT = process.env.PORT || 5200;
@@ -18,8 +19,9 @@ connectToDatabase(ATLAS_URI)
         const app = express();
         app.use(cors());
 
-        // Registers the weather routes
+        // Registers the routes
         app.use("/weather", weatherRouter);
+        app.use("/plant", plantRouter);
 
         app.listen(PORT, () => {
             console.log(`Server running at ${PORT}`);

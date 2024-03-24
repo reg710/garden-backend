@@ -2,7 +2,7 @@ import * as express from "express";
 import * as dotenv from "dotenv";
 import axios from "axios";
 import { DateTime } from 'luxon';
-import { WeatherReport, IWeatherParams } from "./domain-objects/historical-weather";
+import { WeatherReport, IWeatherParams } from "../domain-objects/historical-weather";
 
 dotenv.config();
 const { WEATHER_API_KEY } = process.env;
